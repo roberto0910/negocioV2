@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERVITRAGO</title>
+    <style>
+        :root {
+            --primary: #8B4513;
+            --secondary: #D2691E;
+            --light: #F5F5DC;
+            --dark: #3E2723;
+            --success: #28a745;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: var(--secondary);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: background-color 0.3s;
+            min-width: 150px;
+        }
+        
+        .tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .btn-edit, .btn-delete {
+            padding: 5px 10px;
+            margin-right: 5px;
+        }
+        
+        .btn-edit {
+            background-color: #ffc107;
+            color: black;
+        }
+        
+        .btn-delete {
+            background-color: var(--danger);
+        }
+        
+        .btn-info {
+            background-color: var(--info);
+        }
+        
+        .stock-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stock-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .stock-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .stock-card h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .stock-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .sale-summary {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .report-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .email-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* Modal para detalles de categoría */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        .add-category-btn {
+            background-color: var(--info);
+            padding: 5px 10px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SERVITRAGO</h1>
+            <p>Gestión de inventario y ventas con envío de reportes por email</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="register">Registrar Producto</div>
+            <div class="tab" data-tab="inventory">Inventario</div>
+            <div class="tab" data-tab="sales">Ventas</div>
+            <div class="tab" data-tab="stock">Stock por Categoría</div>
+            <div class="tab" data-tab="reports">Reportes y Email</div>
+        </div>
+        
+        <div id="register" class="tab-content active">
+            <h2>Registro de Productos</h2>
+            <form id="product-form">
+                <div class="form-group">
+                    <label for="product-name">Nombre del Producto:</label>
+                    <input type="text" id="product-name" list="product-names" required>
+                    <datalist id="product-names">
+                        <!-- Las opciones se cargan dinámicamente desde JavaScript -->
+                    </datalist>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-category">Categoría:</label>
+                    <select id="product-category" required>
+                        <option value="">Seleccione una categoría</option>
+                        <!-- Las categorías se cargan dinámicamente -->
+                    </select>
+                    <button type="button" id="add-category-btn" class="add-category-btn">
+                        + Agregar Nueva Categoría
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-price">Precio Unitario:</label>
+                    <input type="number" id="product-price" step="0.01" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-quantity">Cantidad en Stock:</label>
+                    <input type="number" id="product-quantity" min="0" required>
+                </div>
+                
+                <button type="submit">Registrar Producto</button>
+            </form>
+            
+            <div id="register-message"></div>
+        </div>
+        
+        <div id="inventory" class="tab-content">
+            <h2>Inventario de Productos</h2>
+            <div class="form-group">
+                <input type="text" id="search-product" placeholder="Buscar producto...">
+            </div>
+            <table id="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-body">
+                    <!-- Los productos se cargarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="sales" class="tab-content">
+            <h2>Registro de Ventas</h2>
+            <form id="sale-form">
+                <div class="form-group">
+                    <label for="sale-category">Seleccionar Categoría:</label>
+                    <select id="sale-category" required>
+                        <option value="">Seleccione una categoría</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sale-product">Seleccionar Producto:</label>
+                    <select id="sale-product" required>
+                        <option value="">Seleccione un producto</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sale-quantity">Cantidad:</label>
+                    <input type="number" id="sale-quantity" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <p id="product-details">Precio unitario: $0.00 - Stock disponible: 0</p>
+                </div>
+                
+                <button type="submit">Registrar Venta</button>
+            </form>
+            
+            <div class="sale-summary">
+                <h3>Resumen de Venta</h3>
+                <p>Total a pagar: $<span id="total-amount">0.00</span></p>
+            </div>
+            
+            <div id="sale-message"></div>
+        </div>
+        
+        <div id="stock" class="tab-content">
+            <h2>Stock por Categoría</h2>
+            <div class="stock-section" id="stock-cards">
+                <!-- Las tarjetas de stock se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+        
+        <div id="reports" class="tab-content">
+            <h2>Reportes y Envío por Email</h2>
+            
+            <div class="report-section">
+                <h3>Generar Reporte</h3>
+                <p>Seleccione el tipo de reporte que desea generar y enviar por correo electrónico.</p>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="report-type">Tipo de Reporte:</label>
+                        <select id="report-type">
+                            <option value="inventory">Inventario Completo</option>
+                            <option value="low-stock">Productos con Stock Bajo</option>
+                            <option value="sales">Resumen de Ventas</option>
+                            <option value="categories">Stock por Categoría</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="low-stock-threshold">Umbral Stock Bajo (opcional):</label>
+                        <input type="number" id="low-stock-threshold" value="10" min="1">
+                    </div>
+                </div>
+                
+                <button id="generate-report">Generar Reporte</button>
+                <button id="send-email" class="btn-info">Enviar Reporte por Email</button>
+            </div>
+            
+            <div class="email-form">
+                <h3>Configuración de Email</h3>
+                <form id="email-config-form" action="https://formsubmit.co/roberto.negreteq@gmail.com" method="POST" target="_blank">
+                    <input type="hidden" name="_subject" value="Reporte de Licorería">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_next" value="gracias.html">
+                    
+                    <div class="form-group">
+                        <label for="email-to">Correo Destinatario:</label>
+                        <input type="email" id="email-to" name="email" required placeholder="correo@destinatario.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email-subject">Asunto del Correo:</label>
+                        <input type="text" id="email-subject" name="_subject" value="Reporte de Licorería" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email-message">Mensaje Adicional:</label>
+                        <textarea id="email-message" name="message" rows="4" placeholder="Mensaje opcional que acompañará al reporte"></textarea>
+                    </div>
+                    
+                    <input type="hidden" id="report-data" name="report_data">
+                    <input type="text" name="_honey" style="display:none">
+                    <input type="hidden" name="_captcha" value="false">
+                    
+                    <button type="submit" id="submit-email">Enviar Reporte</button>
+                </form>
+            </div>
+            
+            <div id="report-preview">
+                <h3>Vista Previa del Reporte</h3>
+                <div id="report-content">
+                    <p>Genere un reporte para ver la vista previa aquí.</p>
+                </div>
+            </div>
+            
+            <div id="report-message"></div>
+        </div>
+    </div>
+
+    <!-- Modal para detalles de categoría -->
+    <div id="category-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalles de Categoría</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="category-details-content">
+                <!-- El contenido se carga dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para nueva categoría -->
+    <div id="new-category-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Nueva Categoría</h3>
+                <button class="close-modal" data-modal="new-category-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="new-category-name">Nombre de la Categoría:</label>
+                <input type="text" id="new-category-name" placeholder="Ej: Cocteles, Licores Premium, etc.">
+            </div>
+            <div class="form-group">
+                <label for="new-category-color">Color de la Categoría:</label>
+                <input type="color" id="new-category-color" value="#9370DB">
+            </div>
+            <button type="button" id="save-category-btn">Guardar Categoría</button>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos simulada de productos
+        let products = JSON.parse(localStorage.getItem('licoreria_products')) || [];
+        
+        // Historial de ventas
+        let salesHistory = JSON.parse(localStorage.getItem('licoreria_sales')) || [];
+        
+        // Categorías disponibles - Ahora se cargan desde localStorage
+        let categories = JSON.parse(localStorage.getItem('licoreria_categories')) || [
+            { id: 'whiskys', name: 'Whiskys', color: '#8B4513' },
+            { id: 'vinos', name: 'Vinos', color: '#8B0000' },
+            { id: 'vodkas', name: 'Vodkas', color: '#F0F8FF' },
+            { id: 'rons', name: 'Rons', color: '#D2691E' },
+            { id: 'cubatas', name: 'Cubatas', color: '#FF7F50' },
+            { id: 'shumir', name: 'Shumir', color: '#9370DB' },
+            { id: 'aguardientes', name: 'Aguardientes', color: '#9370DB' },
+            { id: 'tequilas', name: 'Tequilas', color: '#9370DB' },
+            { id: 'switch', name: 'Switch', color: '#9370DB' },
+            { id: 'cigarrillos', name: 'Cigarrillos', color: '#696969' }
+        ];
+        
+        // Productos predefinidos del cliente
+        const predefinedProducts = [
+            { name: 'Cristal Seco', category: 'aguardientes', price: 0, quantity: 0 },
+            { name: 'Zhumir Saborizado', category: 'shumir', price: 0, quantity: 0 },
+            { name: 'Antioqueño Azul', category: 'aguardientes', price: 0, quantity: 0 },
+            { name: 'Tropico Coco 15°', category: 'aguardientes', price: 0, quantity: 0 },
+            { name: 'Vodka krasnaya', category: 'vodkas', price: 0, quantity: 0 },
+            { name: 'Siberian Neutro', category: 'vodkas', price: 0, quantity: 0 },
+            { name: 'Teqilero agave wey', category: 'tequilas', price: 0, quantity: 0 },
+            { name: 'Whisky Old Times', category: 'whiskys', price: 0, quantity: 0 },
+            { name: 'Whisky Jack Collins Red', category: 'whiskys', price: 0, quantity: 0 },
+            { name: 'Whisky Glengold Piña', category: 'whiskys', price: 0, quantity: 0 },
+            { name: 'Switch Saborizados', category: 'switch', price: 0, quantity: 0 },
+            { name: 'Vino Tinto El Frile', category: 'vinos', price: 0, quantity: 0 },
+            { name: 'Vino Catador Tinto', category: 'vinos', price: 0, quantity: 0 },
+            { name: 'Cubata de Vodka Strawberry', category: 'cubatas', price: 0, quantity: 0 },
+            { name: 'Whisky Cuningham', category: 'whiskys', price: 0, quantity: 0 },
+            { name: 'Tequila El Charro', category: 'tequilas', price: 0, quantity: 0 },
+            { name: 'Cartago Extra Fino 20°', category: 'whiskys', price: 0, quantity: 0 },
+            { name: 'Whisky Cartago de Manzana', category: 'whiskys', price: 0, quantity: 0 },
+            { name: 'Whisky Jack Collin\'s Green', category: 'whiskys', price: 0, quantity: 0 },
+            { name: 'Whisky Woytek', category: 'whiskys', price: 0, quantity: 0 }
+        ];
+        
+        // Variables para el reporte actual
+        let currentReport = {
+            type: '',
+            content: '',
+            data: ''
+        };
+        
+        // Funciones para manejar las pestañas
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remover clase active de todas las pestañas y contenidos
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Agregar clase active a la pestaña clickeada
+                tab.classList.add('active');
+                
+                // Mostrar el contenido correspondiente
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+                
+                // Actualizar datos según la pestaña seleccionada
+                if (tabId === 'inventory') {
+                    loadInventory();
+                } else if (tabId === 'sales') {
+                    loadCategoriesForSale();
+                    loadProductsForSale();
+                } else if (tabId === 'stock') {
+                    loadStockByCategory();
+                } else if (tabId === 'reports') {
+                    // No necesita carga inicial específica
+                }
+            });
+        });
+        
+        // Función para cargar productos predefinidos en el datalist
+        function loadPredefinedProducts() {
+            const productNamesDatalist = document.getElementById('product-names');
+            productNamesDatalist.innerHTML = '';
+            
+            // Agregar productos predefinidos
+            predefinedProducts.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.name;
+                productNamesDatalist.appendChild(option);
+            });
+            
+            // Agregar productos ya registrados
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.name;
+                productNamesDatalist.appendChild(option);
+            });
+        }
+        
+        // Función para cargar categorías en los select
+        function loadCategories() {
+            const categorySelects = [
+                document.getElementById('product-category'),
+                document.getElementById('sale-category')
+            ];
+            
+            categorySelects.forEach(select => {
+                if (!select) return;
+                
+                // Guardar el valor seleccionado actual
+                const currentValue = select.value;
+                
+                // Limpiar opciones (excepto la primera)
+                const firstOption = select.querySelector('option[value=""]');
+                select.innerHTML = '';
+                if (firstOption) {
+                    select.appendChild(firstOption);
+                } else {
+                    select.innerHTML = '<option value="">Seleccione una categoría</option>';
+                }
+                
+                // Agregar categorías disponibles
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    select.appendChild(option);
+                });
+                
+                // Restaurar el valor seleccionado si existe
+                if (currentValue && categories.some(cat => cat.id === currentValue)) {
+                    select.value = currentValue;
+                }
+            });
+        }
+        
+        // Función para guardar categorías en localStorage
+        function saveCategories() {
+            localStorage.setItem('licoreria_categories', JSON.stringify(categories));
+        }
+        
+        // Función para guardar productos en localStorage
+        function saveProducts() {
+            localStorage.setItem('licoreria_products', JSON.stringify(products));
+        }
+        
+        // Función para guardar ventas en localStorage
+        function saveSales() {
+            localStorage.setItem('licoreria_sales', JSON.stringify(salesHistory));
+        }
+        
+        // Función para mostrar mensajes
+        function showMessage(elementId, message, type) {
+            const messageElement = document.getElementById(elementId);
+            messageElement.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            
+            // Limpiar mensaje después de 5 segundos
+            setTimeout(() => {
+                messageElement.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Función para agregar nueva categoría
+        function addNewCategory(name, color) {
+            // Validar que el nombre no esté vacío
+            if (!name || name.trim() === '') {
+                showMessage('register-message', 'El nombre de la categoría no puede estar vacío', 'danger');
+                return false;
+            }
+            
+            // Generar ID único para la categoría (sin espacios y en minúsculas)
+            const newCategoryId = name.toLowerCase().replace(/\s+/g, '_');
+            
+            // Verificar si la categoría ya existe
+            if (categories.some(cat => cat.id === newCategoryId)) {
+                showMessage('register-message', 'Esta categoría ya existe', 'danger');
+                return false;
+            }
+            
+            // Crear nueva categoría
+            const newCategory = {
+                id: newCategoryId,
+                name: name.trim(),
+                color: color
+            };
+            
+            // Agregar a la lista de categorías
+            categories.push(newCategory);
+            
+            // Guardar en localStorage
+            saveCategories();
+            
+            // Actualizar selects
+            loadCategories();
+            
+            // Seleccionar la nueva categoría en el formulario de registro
+            document.getElementById('product-category').value = newCategoryId;
+            
+            return true;
+        }
+        
+        // Registrar producto
+        document.getElementById('product-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('product-name').value;
+            const category = document.getElementById('product-category').value;
+            const price = parseFloat(document.getElementById('product-price').value);
+            const quantity = parseInt(document.getElementById('product-quantity').value);
+            
+            // Validar que la categoría sea válida
+            if (!categories.some(cat => cat.id === category)) {
+                showMessage('register-message', 'Por favor seleccione una categoría válida', 'danger');
+                return;
+            }
+            
+            // Crear nuevo producto
+            const newProduct = {
+                id: Date.now(), // ID único basado en timestamp
+                name,
+                category,
+                price,
+                quantity
+            };
+            
+            // Agregar producto a la lista
+            products.push(newProduct);
+            
+            // Guardar en localStorage
+            saveProducts();
+            
+            // Actualizar la lista de productos predefinidos
+            loadPredefinedProducts();
+            
+            // Limpiar formulario
+            document.getElementById('product-form').reset();
+            
+            // Mostrar mensaje de éxito
+            showMessage('register-message', 'Producto registrado exitosamente', 'success');
+            
+            // Actualizar inventario si está visible
+            if (document.getElementById('inventory').classList.contains('active')) {
+                loadInventory();
+            }
+        });
+        
+        // Cargar inventario
+        function loadInventory() {
+            const inventoryBody = document.getElementById('inventory-body');
+            const searchTerm = document.getElementById('search-product').value.toLowerCase();
+            
+            // Filtrar productos según término de búsqueda
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) || 
+                product.category.toLowerCase().includes(searchTerm)
+            );
+            
+            // Limpiar tabla
+            inventoryBody.innerHTML = '';
+            
+            // Agregar productos a la tabla
+            filteredProducts.forEach(product => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${categories.find(cat => cat.id === product.category).name}</td>
+                    <td>$${product.price.toFixed(2)}</td>
+                    <td>${product.quantity}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editProduct(${product.id})">Editar</button>
+                        <button class="btn-delete" onclick="deleteProduct(${product.id})">Eliminar</button>
+                    </td>
+                `;
+                
+                inventoryBody.appendChild(row);
+            });
+        }
+        
+        // Función para editar producto
+        function editProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            if (!product) return;
+            
+            // Llenar formulario con datos del producto
+            document.getElementById('product-name').value = product.name;
+            document.getElementById('product-category').value = product.category;
+            document.getElementById('product-price').value = product.price;
+            document.getElementById('product-quantity').value = product.quantity;
+            
+            // Eliminar producto de la lista (será reemplazado con los nuevos datos)
+            products = products.filter(p => p.id !== productId);
+            
+            // Guardar cambios
+            saveProducts();
+            
+            // Actualizar inventario
+            loadInventory();
+            
+            // Cambiar a la pestaña de registro
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            document.querySelector('.tab[data-tab="register"]').classList.add('active');
+            document.getElementById('register').classList.add('active');
+            
+            showMessage('register-message', 'Producto cargado para edición. Complete los cambios y haga clic en "Registrar Producto"', 'success');
+        }
+        
+        // Función para eliminar producto
+        function deleteProduct(productId) {
+            if (confirm('¿Está seguro de que desea eliminar este producto?')) {
+                products = products.filter(p => p.id !== productId);
+                saveProducts();
+                loadInventory();
+                showMessage('register-message', 'Producto eliminado exitosamente', 'success');
+            }
+        }
+        
+        // Cargar categorías para venta
+        function loadCategoriesForSale() {
+            const saleCategorySelect = document.getElementById('sale-category');
+            
+            // Limpiar select
+            saleCategorySelect.innerHTML = '<option value="">Seleccione una categoría</option>';
+            
+            // Agregar categorías disponibles
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                saleCategorySelect.appendChild(option);
+            });
+        }
+        
+        // Cargar productos para venta
+        function loadProductsForSale() {
+            const saleProductSelect = document.getElementById('sale-product');
+            const saleCategorySelect = document.getElementById('sale-category');
+            const selectedCategory = saleCategorySelect.value;
+            
+            // Limpiar select
+            saleProductSelect.innerHTML = '<option value="">Seleccione un producto</option>';
+            
+            // Filtrar productos por categoría si hay una seleccionada
+            const filteredProducts = selectedCategory ? 
+                products.filter(product => product.category === selectedCategory && product.quantity > 0) :
+                products.filter(product => product.quantity > 0);
+            
+            // Agregar productos disponibles
+            filteredProducts.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.id;
+                option.textContent = `${product.name} - $${product.price.toFixed(2)} (Stock: ${product.quantity})`;
+                saleProductSelect.appendChild(option);
+            });
+            
+            // Actualizar detalles del producto seleccionado
+            updateProductDetails();
+        }
+        
+        // Actualizar detalles del producto seleccionado
+        function updateProductDetails() {
+            const saleProductSelect = document.getElementById('sale-product');
+            const productDetails = document.getElementById('product-details');
+            const saleQuantity = document.getElementById('sale-quantity');
+            const totalAmount = document.getElementById('total-amount');
+            
+            const productId = parseInt(saleProductSelect.value);
+            const product = products.find(p => p.id === productId);
+            
+            if (product) {
+                productDetails.textContent = `Precio unitario: $${product.price.toFixed(2)} - Stock disponible: ${product.quantity}`;
+                
+                // Actualizar cantidad máxima
+                saleQuantity.max = product.quantity;
+                
+                // Calcular total
+                calculateTotal();
+            } else {
+                productDetails.textContent = 'Precio unitario: $0.00 - Stock disponible: 0';
+                totalAmount.textContent = '0.00';
+                saleQuantity.value = '';
+                saleQuantity.max = 0;
+            }
+        }
+        
+        // Calcular total de venta
+        function calculateTotal() {
+            const saleProductSelect = document.getElementById('sale-product');
+            const saleQuantity = document.getElementById('sale-quantity');
+            const totalAmount = document.getElementById('total-amount');
+            
+            const productId = parseInt(saleProductSelect.value);
+            const quantity = parseInt(saleQuantity.value) || 0;
+            const product = products.find(p => p.id === productId);
+            
+            if (product && quantity > 0) {
+                const total = product.price * quantity;
+                totalAmount.textContent = total.toFixed(2);
+            } else {
+                totalAmount.textContent = '0.00';
+            }
+        }
+        
+        // Registrar venta
+        document.getElementById('sale-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const productId = parseInt(document.getElementById('sale-product').value);
+            const quantity = parseInt(document.getElementById('sale-quantity').value);
+            
+            if (!productId || quantity <= 0) {
+                showMessage('sale-message', 'Por favor seleccione un producto y una cantidad válida', 'danger');
+                return;
+            }
+            
+            const productIndex = products.findIndex(p => p.id === productId);
+            
+            if (productIndex === -1) {
+                showMessage('sale-message', 'Producto no encontrado', 'danger');
+                return;
+            }
+            
+            if (products[productIndex].quantity < quantity) {
+                showMessage('sale-message', 'Stock insuficiente para realizar la venta', 'danger');
+                return;
+            }
+            
+            // Registrar la venta en el historial
+            const sale = {
+                id: Date.now(),
+                productId: productId,
+                productName: products[productIndex].name,
+                quantity: quantity,
+                unitPrice: products[productIndex].price,
+                total: products[productIndex].price * quantity,
+                date: new Date().toLocaleString()
+            };
+            
+            salesHistory.push(sale);
+            saveSales();
+            
+            // Actualizar stock
+            products[productIndex].quantity -= quantity;
+            
+            // Guardar cambios
+            saveProducts();
+            
+            // Mostrar mensaje de éxito
+            showMessage('sale-message', `Venta registrada exitosamente. Total: $${sale.total.toFixed(2)}`, 'success');
+            
+            // Actualizar formulario
+            document.getElementById('sale-form').reset();
+            updateProductDetails();
+            loadProductsForSale();
+        });
+        
+        // Cargar stock por categoría
+        function loadStockByCategory() {
+            const stockCards = document.getElementById('stock-cards');
+            
+            // Limpiar tarjetas
+            stockCards.innerHTML = '';
+            
+            // Calcular stock por categoría
+            const stockByCategory = {};
+            categories.forEach(category => {
+                stockByCategory[category.id] = 0;
+            });
+            
+            products.forEach(product => {
+                if (stockByCategory.hasOwnProperty(product.category)) {
+                    stockByCategory[product.category] += product.quantity;
+                }
+            });
+            
+            // Crear tarjetas para cada categoría
+            categories.forEach(category => {
+                const stockCard = document.createElement('div');
+                stockCard.className = 'stock-card';
+                stockCard.style.borderTop = `4px solid ${category.color}`;
+                stockCard.setAttribute('data-category', category.id);
+                
+                stockCard.innerHTML = `
+                    <h3>${category.name}</h3>
+                    <div class="stock-value">${stockByCategory[category.id]}</div>
+                    <p>unidades en stock</p>
+                `;
+                
+                // Agregar evento click para mostrar detalles
+                stockCard.addEventListener('click', () => {
+                    showCategoryDetails(category.id);
+                });
+                
+                stockCards.appendChild(stockCard);
+            });
+        }
+        
+        // Función para mostrar detalles de categoría
+        function showCategoryDetails(categoryId) {
+            const category = categories.find(cat => cat.id === categoryId);
+            const categoryProducts = products.filter(p => p.category === categoryId);
+            
+            // Crear contenido del modal
+            let modalContent = `<h3>${category.name} - Detalles de Productos</h3>`;
+            
+            if (categoryProducts.length > 0) {
+                modalContent += '<table><tr><th>Producto</th><th>Stock</th><th>Precio</th></tr>';
+                
+                categoryProducts.forEach(product => {
+                    modalContent += `<tr>
+                        <td>${product.name}</td>
+                        <td>${product.quantity}</td>
+                        <td>$${product.price.toFixed(2)}</td>
+                    </tr>`;
+                });
+                
+                modalContent += '</table>';
+            } else {
+                modalContent += '<p>No hay productos en esta categoría.</p>';
+            }
+            
+            // Mostrar modal
+            document.getElementById('category-details-content').innerHTML = modalContent;
+            document.getElementById('category-details-modal').style.display = 'flex';
+        }
+        
+        // Cerrar modal
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modalId = e.target.getAttribute('data-modal') || 'category-details-modal';
+                document.getElementById(modalId).style.display = 'none';
+            });
+        });
+        
+        // Cerrar modal al hacer click fuera del contenido
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+        
+        // Abrir modal para nueva categoría
+        document.getElementById('add-category-btn').addEventListener('click', () => {
+            document.getElementById('new-category-name').value = '';
+            document.getElementById('new-category-color').value = '#9370DB';
+            document.getElementById('new-category-modal').style.display = 'flex';
+        });
+        
+        // Guardar nueva categoría
+        document.getElementById('save-category-btn').addEventListener('click', () => {
+            const categoryName = document.getElementById('new-category-name').value;
+            const categoryColor = document.getElementById('new-category-color').value;
+            
+            if (addNewCategory(categoryName, categoryColor)) {
+                document.getElementById('new-category-modal').style.display = 'none';
+                showMessage('register-message', 'Categoría agregada exitosamente', 'success');
+            }
+        });
+        
+        // Generar reporte
+        document.getElementById('generate-report').addEventListener('click', function() {
+            const reportType = document.getElementById('report-type').value;
+            const threshold = parseInt(document.getElementById('low-stock-threshold').value) || 10;
+            
+            generateReport(reportType, threshold);
+        });
+        
+        // Función para generar reportes
+        function generateReport(type, threshold = 10) {
+            let reportContent = '';
+            let reportData = '';
+            let reportTitle = '';
+            
+            switch(type) {
+                case 'inventory':
+                    reportTitle = 'Inventario Completo';
+                    reportContent = '<h3>Inventario Completo de Productos</h3>';
+                    reportContent += '<table border="1" style="width:100%; border-collapse:collapse;">';
+                    reportContent += '<tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th></tr>';
+                    
+                    products.forEach(product => {
+                        reportContent += `<tr>
+                            <td>${product.name}</td>
+                            <td>${categories.find(cat => cat.id === product.category).name}</td>
+                            <td>$${product.price.toFixed(2)}</td>
+                            <td>${product.quantity}</td>
+                        </tr>`;
+                    });
+                    
+                    reportContent += '</table>';
+                    reportData = JSON.stringify(products);
+                    break;
+                    
+                case 'low-stock':
+                    reportTitle = 'Productos con Stock Bajo';
+                    const lowStockProducts = products.filter(p => p.quantity <= threshold);
+                    
+                    reportContent = `<h3>Productos con Stock Bajo (≤ ${threshold} unidades)</h3>`;
+                    
+                    if (lowStockProducts.length > 0) {
+                        reportContent += '<table border="1" style="width:100%; border-collapse:collapse;">';
+                        reportContent += '<tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th></tr>';
+                        
+                        lowStockProducts.forEach(product => {
+                            reportContent += `<tr>
+                                <td>${product.name}</td>
+                                <td>${categories.find(cat => cat.id === product.category).name}</td>
+                                <td>$${product.price.toFixed(2)}</td>
+                                <td>${product.quantity}</td>
+                            </tr>`;
+                        });
+                        
+                        reportContent += '</table>';
+                    } else {
+                        reportContent += '<p>No hay productos con stock bajo.</p>';
+                    }
+                    
+                    reportData = JSON.stringify(lowStockProducts);
+                    break;
+                    
+                case 'sales':
+                    reportTitle = 'Resumen de Ventas';
+                    reportContent = '<h3>Resumen de Ventas Recientes</h3>';
+                    
+                    if (salesHistory.length > 0) {
+                        // Ventas del día
+                        const today = new Date().toLocaleDateString();
+                        const todaySales = salesHistory.filter(sale => sale.date.includes(today));
+                        const todayTotal = todaySales.reduce((sum, sale) => sum + sale.total, 0);
+                        
+                        // Ventas de la semana
+                        const weekAgo = new Date();
+                        weekAgo.setDate(weekAgo.getDate() - 7);
+                        const weekSales = salesHistory.filter(sale => new Date(sale.date) >= weekAgo);
+                        const weekTotal = weekSales.reduce((sum, sale) => sum + sale.total, 0);
+                        
+                        reportContent += `<p><strong>Ventas de hoy (${today}):</strong> $${todayTotal.toFixed(2)}</p>`;
+                        reportContent += `<p><strong>Ventas de los últimos 7 días:</strong> $${weekTotal.toFixed(2)}</p>`;
+                        
+                        reportContent += '<h4>Últimas ventas:</h4>';
+                        reportContent += '<table border="1" style="width:100%; border-collapse:collapse;">';
+                        reportContent += '<tr><th>Producto</th><th>Cantidad</th><th>Precio Unitario</th><th>Total</th><th>Fecha</th></tr>';
+                        
+                        // Mostrar las últimas 10 ventas
+                        const recentSales = salesHistory.slice(-10);
+                        recentSales.forEach(sale => {
+                            reportContent += `<tr>
+                                <td>${sale.productName}</td>
+                                <td>${sale.quantity}</td>
+                                <td>$${sale.unitPrice.toFixed(2)}</td>
+                                <td>$${sale.total.toFixed(2)}</td>
+                                <td>${sale.date}</td>
+                            </tr>`;
+                        });
+                        
+                        reportContent += '</table>';
+                    } else {
+                        reportContent += '<p>No hay ventas registradas.</p>';
+                    }
+                    
+                    reportData = JSON.stringify(salesHistory);
+                    break;
+                    
+                case 'categories':
+                    reportTitle = 'Stock por Categoría';
+                    reportContent = '<h3>Stock de Productos por Categoría</h3>';
+                    
+                    // Calcular stock por categoría
+                    const stockByCategory = {};
+                    categories.forEach(category => {
+                        stockByCategory[category.name] = 0;
+                    });
+                    
+                    products.forEach(product => {
+                        const categoryName = categories.find(cat => cat.id === product.category).name;
+                        stockByCategory[categoryName] += product.quantity;
+                    });
+                    
+                    reportContent += '<table border="1" style="width:100%; border-collapse:collapse;">';
+                    reportContent += '<tr><th>Categoría</th><th>Stock Total</th></tr>';
+                    
+                    for (const [category, stock] of Object.entries(stockByCategory)) {
+                        reportContent += `<tr><td>${category}</td><td>${stock} unidades</td></tr>`;
+                    }
+                    
+                    reportContent += '</table>';
+                    reportData = JSON.stringify(stockByCategory);
+                    break;
+            }
+            
+            // Actualizar el reporte actual
+            currentReport = {
+                type: type,
+                content: reportContent,
+                data: reportData,
+                title: reportTitle
+            };
+            
+            // Mostrar vista previa
+            document.getElementById('report-content').innerHTML = reportContent;
+            
+            // Actualizar el campo oculto del formulario de email
+            document.getElementById('report-data').value = reportData;
+            
+            // Actualizar el asunto del correo
+            document.getElementById('email-subject').value = `Reporte de Licorería - ${reportTitle}`;
+            
+            showMessage('report-message', `Reporte "${reportTitle}" generado correctamente`, 'success');
+        }
+        
+        // Configurar el formulario de email para FormSubmit
+        document.getElementById('email-config-form').addEventListener('submit', function(e) {
+            // Validar que hay un reporte generado
+            if (!currentReport.content) {
+                e.preventDefault();
+                showMessage('report-message', 'Por favor genere un reporte antes de enviarlo por email', 'danger');
+                return;
+            }
+            
+            // Agregar el contenido del reporte al mensaje
+            const message = document.getElementById('email-message').value;
+            const fullMessage = message + '\n\n' + currentReport.content.replace(/<[^>]*>/g, '');
+            document.getElementById('email-message').value = fullMessage;
+            
+            showMessage('report-message', 'Enviando reporte por correo electrónico...', 'info');
+            
+            // Redirección automática después de 3 segundos (como respaldo)
+            setTimeout(() => {
+                window.location.href = 'gracias.html';
+            }, 3000);
+        });
+        
+        // Event listeners para actualizaciones en tiempo real
+        document.getElementById('search-product').addEventListener('input', loadInventory);
+        document.getElementById('sale-category').addEventListener('change', loadProductsForSale);
+        document.getElementById('sale-product').addEventListener('change', updateProductDetails);
+        document.getElementById('sale-quantity').addEventListener('input', calculateTotal);
+        
+        // Cargar datos iniciales al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPredefinedProducts();
+            loadCategories();
+            loadInventory();
+            loadCategoriesForSale();
+            loadProductsForSale();
+            loadStockByCategory();
+            
+            // Generar un reporte inicial
+            generateReport('inventory');
+        });
+    </script>
+</body>
+</html>
