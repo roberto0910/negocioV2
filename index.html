@@ -13,6 +13,7 @@
             --success: #28a745;
             --danger: #dc3545;
             --info: #17a2b8;
+            --warning: #ffc107;
         }
         
         * {
@@ -217,6 +218,12 @@
             background-color: #d1ecf1;
             color: #0c5460;
             border: 1px solid #bee5eb;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
         }
         
         .report-section {
@@ -690,6 +697,35 @@
             }, 5000);
         }
         
+        // Función para validar que el producto pertenece a la categoría seleccionada
+        function validateProductCategory(productName, selectedCategory) {
+            // Buscar el producto en la lista predefinida
+            const predefinedProduct = predefinedProducts.find(p => p.name === productName);
+            
+            // Si el producto está predefinido, verificar que la categoría coincida
+            if (predefinedProduct) {
+                if (predefinedProduct.category !== selectedCategory) {
+                    const correctCategory = categories.find(cat => cat.id === predefinedProduct.category);
+                    return {
+                        isValid: false,
+                        message: `El producto "${productName}" pertenece a la categoría "${correctCategory.name}". Por favor seleccione la categoría correcta.`
+                    };
+                }
+            }
+            
+            // Si el producto ya existe en el inventario, verificar que la categoría coincida
+            const existingProduct = products.find(p => p.name === productName);
+            if (existingProduct && existingProduct.category !== selectedCategory) {
+                const correctCategory = categories.find(cat => cat.id === existingProduct.category);
+                return {
+                    isValid: false,
+                    message: `El producto "${productName}" ya existe en la categoría "${correctCategory.name}". Por favor seleccione la categoría correcta.`
+                };
+            }
+            
+            return { isValid: true };
+        }
+        
         // Función para agregar nueva categoría
         function addNewCategory(name, color) {
             // Validar que el nombre no esté vacío
@@ -741,6 +777,13 @@
             // Validar que la categoría sea válida
             if (!categories.some(cat => cat.id === category)) {
                 showMessage('register-message', 'Por favor seleccione una categoría válida', 'danger');
+                return;
+            }
+            
+            // Validar que el producto pertenece a la categoría seleccionada
+            const validation = validateProductCategory(name, category);
+            if (!validation.isValid) {
+                showMessage('register-message', validation.message, 'warning');
                 return;
             }
             
